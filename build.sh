@@ -48,7 +48,7 @@ else
 fi
 
 # Version selection
-export RT_MINOR=6
+export RT_MINOR=7
 export LT_VERSION=0.13.$RT_MINOR; export RT_VERSION=0.9.$RT_MINOR;
 export GIT_MINOR=$(( $RT_MINOR + 1 ))  # ensure git version has a bumped version number
 export VERSION_EXTRAS=" $git_id"
@@ -104,8 +104,8 @@ export PACKAGE_ROOT INSTALL_ROOT INSTALL_DIR BIN_DIR CURL_OPTS MAKE_OPTS CFG_OPT
 export SRC_DIR=$(cd $(dirname $0) && pwd)
 LT_PATCHES=( )
 RT_PATCHES=( )
-LT_BASE_PATCHES=( $SRC_DIR/patches/lt-base-cppunit-pkgconfig.patch )
-RT_BASE_PATCHES=( $SRC_DIR/patches/rt-base-cppunit-pkgconfig.patch )
+LT_BASE_PATCHES=( )
+RT_BASE_PATCHES=( )
 
 # Distro specifics
 case $(echo -n "$(lsb_release -sic 2>/dev/null || echo NonLSB)" | tr ' \n' '-') in
@@ -223,9 +223,10 @@ esac
 # Keep rTorrent version, once it was built in this directory
 # (this list also can be considered 'supported' versions,
 # though only the last stable is regularly compiled)
-test -d rtorrent-0.9.4 && { export LT_VERSION=0.13.4; export RT_VERSION=0.9.4; }
-test -d rtorrent-0.9.5 && { export LT_VERSION=0.13.5; export RT_VERSION=0.9.5; }
-test -d rtorrent-0.9.6 && { export LT_VERSION=0.13.6; export RT_VERSION=0.9.6; }
+#test -d rtorrent-0.9.4 && { export LT_VERSION=0.13.4; export RT_VERSION=0.9.4; }
+#test -d rtorrent-0.9.5 && { export LT_VERSION=0.13.5; export RT_VERSION=0.9.5; }
+#test -d rtorrent-0.9.6 && { export LT_VERSION=0.13.6; export RT_VERSION=0.9.6; }
+test -d rtorrent-0.9.7 && { export LT_VERSION=0.13.7; export RT_VERSION=0.9.7; }
 BUILD_GIT=false
 
 
@@ -276,8 +277,8 @@ esac
 #   http://pkgs.fedoraproject.org/repo/pkgs/libtorrent/
 #   http://pkgs.fedoraproject.org/repo/pkgs/rtorrent/
 TARBALLS+=(
-"https://bintray.com/artifact/download/pyroscope/rtorrent-ps/libtorrent-$LT_VERSION.tar.gz"
-"https://bintray.com/artifact/download/pyroscope/rtorrent-ps/rtorrent-$RT_VERSION.tar.gz"
+"https://github.com/rakshasa/rtorrent/releases/download/v0.9.7/libtorrent-0.13.7.tar.gz"
+"https://github.com/rakshasa/rtorrent/releases/download/v0.9.7/rtorrent-0.9.7.tar.gz"
 )
 
 BUILD_CMD_DEPS=$(cat <<.

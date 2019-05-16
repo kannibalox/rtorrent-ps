@@ -49,7 +49,7 @@
 
 // In 0.9.x this changed to 'tr1' (dropping sigc::bind), see https://stackoverflow.com/a/4682954/2748717
 // "C++ Technical Report 1" was later added to "C++11", using tr1 makes stuff compile on older GCC
-#define _cxxstd_ tr1
+#define _cxxstd_ std
 
 // List of system capabilities for `system.has` command
 static std::set<std::string> system_capabilities;
@@ -60,7 +60,7 @@ int log_messages_fd = -1;
 };
 
 
-#if RT_HEX_VERSION <= 0x000906
+#if RT_HEX_VERSION <= 0x000907
 // will be merged into 0.9.7+ mainline!
 
 namespace torrent {
@@ -1351,6 +1351,7 @@ void initialize_command_pyroscope() {
     // these are merged into 0.9.8+ mainline! (well, maybe, PRs are mostly ignored)
     CMD2_ANY_LIST("system.random", &apply_random);
     CMD2_ANY_LIST("d.multicall.filtered", _cxxstd_::bind(&d_multicall_filtered, _cxxstd_::placeholders::_2));
+
 #endif
 
     // string.* group
@@ -1372,9 +1373,6 @@ void initialize_command_pyroscope() {
     CMD2_ANY_LIST("string.lpad",        std::bind(&cmd_string_pad, false, std::placeholders::_2));
     CMD2_ANY_LIST("string.rpad",        std::bind(&cmd_string_pad, true,  std::placeholders::_2));
 
-    // array.* group
-    CMD2_ANY_LIST("array.at", &cmd_array_at);
-
     // math.* group
     CMD2_ANY_LIST("math.add", std::bind(&apply_math_basic, "math.add", std::plus<int64_t>(), std::placeholders::_2));
     CMD2_ANY_LIST("math.sub", std::bind(&apply_math_basic, "math.sub", std::minus<int64_t>(), std::placeholders::_2));
@@ -1386,6 +1384,9 @@ void initialize_command_pyroscope() {
     CMD2_ANY_LIST("math.cnt", std::bind(&apply_arith_count, std::placeholders::_2));
     CMD2_ANY_LIST("math.avg", std::bind(&apply_arith_other, "average", std::placeholders::_2));
     CMD2_ANY_LIST("math.med", std::bind(&apply_arith_other, "median", std::placeholders::_2));
+ 
+    // array.* group
+    CMD2_ANY_LIST("array.at", &cmd_array_at);
 
     // ui.focus.* – quick paging
     CMD2_ANY("ui.focus.home", _cxxstd_::bind(&cmd_ui_focus_home));
@@ -1431,8 +1432,6 @@ void initialize_command_pyroscope() {
     CMD2_ANY_STRING("log.messages", _cxxstd_::bind(&cmd_log_messages, _cxxstd_::placeholders::_2));
     CMD2_ANY_P("import.return", &cmd_import_return);
     CMD2_ANY("do", _cxxstd_::bind(&cmd_do, _cxxstd_::placeholders::_1, _cxxstd_::placeholders::_2));
-    CMD2_DL("d.is_meta", _cxxstd_::bind(&torrent::DownloadInfo::is_meta_download,
-                                        _cxxstd_::bind(&core::Download::info, _cxxstd_::placeholders::_1)));
 
     // List capabilities of this build
     add_capability("system.has");         // self
